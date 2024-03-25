@@ -16,7 +16,7 @@ const allowedApis = new Set([
   'https://api.live.bilibili.com/room/v1/Room/room_init',
   'https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo',
   'https://live-open.biliapi.com/v2/app/start',
-  'https://live-open.biliapi.com/v2/app/end',
+  'https://live-open.biliapi.com/v2/app/heartbeat',
 ]);
 
 function resp404() {
