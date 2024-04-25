@@ -35,13 +35,15 @@ async function handleProxy({ url, method, headers, body }: ProxyOptions) {
     return resp404();
   }
 
-  let res = await fetch(url, { method, headers, body });
-  res = new Response(res.body, res);
-  res.headers.set('Access-Control-Allow-Origin', '*');
-  res.headers.set('Cache-Control', 'no-cache');
-  res.headers.delete('Set-Cookie');
+  const res = await fetch(url, { method, headers, body });
 
-  return res;
+  return new Response(res.body, {
+    headers: {
+      'Content-Type': res.headers.get('Content-Type')!,
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-cache',
+    },
+  });
 }
 
 function handleOptions(request: Request) {
@@ -61,7 +63,8 @@ function handleOptions(request: Request) {
   }
 }
 
-const handler: ExportedHandler = {
+const handler: ExportedHandler & { port: number } = {
+  port: 7860,
   async fetch(request) {
     const origin = request.headers.get('Origin') || request.headers.get('Referer');
     if (!origin) return resp404();
